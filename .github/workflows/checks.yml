@@ -1,61 +1,68 @@
 ---
 name: Checks
-runs-on: ubuntu-latest
-steps:
-  - name: Login to Docker Hub
-    uses: docker/login-action@v2
-    with:
-      - username: ${ secrets.DOCKERHUB_USERNAME }
-      - password: ${ secrets.DOCKERHUB_PASSWORD }
-  - name: Checkout
-    uses: actions/checkout@v2
-  - name: Test and Lint client app
-    run: docker-compose run --rm -e CI=true client sh -c "npm run test && npm run lint"
-  - name: Extract client metadata (tags, labels) for Docker
-    id: client-meta
-    uses: docker/metadata-action@v4
-    with:
-      images: rzldev/multi-client:1.0
-  - name: Build and push client docker image
-    uses: docker/build-push-action@v3
-    with:
-      context: .
-      push: ${{ github.event_name != 'pull_request' }}
-      tags: ${{ steps.client-meta.output.tags }}
-      labels: ${{ steps.client-meta.output.labels }}
-  - name: Extract worker metadata (tags, labels) for Docker
-    id: worker-meta
-    uses: docker/metadata-action@v4
-    with:
-      images: rzldev/multi-worker:1.0
-  - name: Build and push worker docker image
-    uses: docker/build-push-action@v3
-    with:
-      context: .
-      push: ${{ github.event_name != 'pull_request' }}
-      tags: ${{ steps.worker-meta.output.tags }}
-      labels: ${{ steps.worker-meta.output.labels }}
-  - name: Extract api metadata (tags, labels) for Docker
-    id: api-meta
-    uses: docker/metadata-action@v4
-    with:
-      images: rzldev/multi-api:1.0
-  - name: Build and push api docker image
-    uses: docker/build-push-action@v3
-    with:
-      context: .
-      push: ${{ github.event_name != 'pull_request' }}
-      tags: ${{ steps.api-meta.output.tags }}
-      labels: ${{ steps.api-meta.output.labels }}
-  - name: Extract nginx metadata (tags, labels) for Docker
-    id: nginx-meta
-    uses: docker/metadata-action@v4
-    with:
-      images: rzldev/multi-nginx:1.0
-  - name: Build and push nginx docker image
-    uses: docker/build-push-action@v3
-    with:
-      context: .
-      push: ${{ github.event_name != 'pull_request' }}
-      tags: ${{ steps.nginx-meta.output.tags }}
-      labels: ${{ steps.nginx-meta.output.labels }}
+on:
+  push:
+    branches:
+      - master
+jobs:
+  prepare-to-deploy:
+    name: Prepare to deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          - username: ${ secrets.DOCKERHUB_USERNAME }
+          - password: ${ secrets.DOCKERHUB_PASSWORD }
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test and Lint client app
+        run: docker-compose run --rm -e CI=true client sh -c "npm run test && npm run lint"
+      - name: Extract client metadata (tags, labels) for Docker
+        id: client-meta
+        uses: docker/metadata-action@v4
+        with:
+          images: rzldev/multi-client:1.0
+      - name: Build and push client docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.client-meta.output.tags }}
+          labels: ${{ steps.client-meta.output.labels }}
+      - name: Extract worker metadata (tags, labels) for Docker
+        id: worker-meta
+        uses: docker/metadata-action@v4
+        with:
+          images: rzldev/multi-worker:1.0
+      - name: Build and push worker docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.worker-meta.output.tags }}
+          labels: ${{ steps.worker-meta.output.labels }}
+      - name: Extract api metadata (tags, labels) for Docker
+        id: api-meta
+        uses: docker/metadata-action@v4
+        with:
+          images: rzldev/multi-api:1.0
+      - name: Build and push api docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.api-meta.output.tags }}
+          labels: ${{ steps.api-meta.output.labels }}
+      - name: Extract nginx metadata (tags, labels) for Docker
+        id: nginx-meta
+        uses: docker/metadata-action@v4
+        with:
+          images: rzldev/multi-nginx:1.0
+      - name: Build and push nginx docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.nginx-meta.output.tags }}
+          labels: ${{ steps.nginx-meta.output.labels }}
