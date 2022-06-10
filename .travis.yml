@@ -1,0 +1,22 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+
+script:
+  - docker-compose run --rm -e CI=true client sh -c "npm run test && npm run lint"
+
+after_success:
+  - docker build -t rzldev/multi-client:2.0 ./client
+  - docker build -t rzldev/multi-worker:2.0 ./worker
+  - docker build -t rzldev/multi-server:2.0 ./server
+  - docker build -t rzldev/multi-nginx:2.0 ./nginx
+  # Login to docker cli
+  - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push rzldev/multi-client:2.0
+  - docker push rzldev/multi-worker:2.0
+  - docker push rzldev/multi-server:2.0
+  - docker push rzldev/multi-nginx:2.0
