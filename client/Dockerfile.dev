@@ -6,4 +6,4 @@ COPY ./package.json ./
 RUN npm install
 COPY ./ ./
 
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npm run lint:fix && npm run lint && npm run prettify && npm run start"]
