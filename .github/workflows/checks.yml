@@ -28,8 +28,8 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.client-meta.output.tags }}
-          labels: ${{ steps.client-meta.output.labels }}
+          tags: ${{ steps.client-meta.outputs.tags }}
+          labels: ${{ steps.client-meta.outputs.labels }}
       - name: Extract worker metadata (tags, labels) for Docker
         id: worker-meta
         uses: docker/metadata-action@v4
@@ -40,8 +40,8 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.worker-meta.output.tags }}
-          labels: ${{ steps.worker-meta.output.labels }}
+          tags: ${{ steps.worker-meta.outputs.tags }}
+          labels: ${{ steps.worker-meta.outputs.labels }}
       - name: Extract api metadata (tags, labels) for Docker
         id: api-meta
         uses: docker/metadata-action@v4
@@ -52,8 +52,8 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.api-meta.output.tags }}
-          labels: ${{ steps.api-meta.output.labels }}
+          tags: ${{ steps.api-meta.outputs.tags }}
+          labels: ${{ steps.api-meta.outputs.labels }}
       - name: Extract nginx metadata (tags, labels) for Docker
         id: nginx-meta
         uses: docker/metadata-action@v4
@@ -64,5 +64,5 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.nginx-meta.output.tags }}
-          labels: ${{ steps.nginx-meta.output.labels }}
+          tags: ${{ steps.nginx-meta.outputs.tags }}
+          labels: ${{ steps.nginx-meta.outputs.labels }}
