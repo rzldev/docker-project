@@ -22,7 +22,12 @@ jobs:
         id: client-meta
         uses: docker/metadata-action@v4
         with:
-          images: rzldev/multi-client:1.0
+          images: rzldev/multi-client
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       - name: Build and push client docker image
         uses: docker/build-push-action@v3
         with:
@@ -34,7 +39,12 @@ jobs:
         id: worker-meta
         uses: docker/metadata-action@v4
         with:
-          images: rzldev/multi-worker:1.0
+          images: rzldev/multi-worker
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       - name: Build and push worker docker image
         uses: docker/build-push-action@v3
         with:
@@ -46,7 +56,12 @@ jobs:
         id: api-meta
         uses: docker/metadata-action@v4
         with:
-          images: rzldev/multi-api:1.0
+          images: rzldev/multi-api
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       - name: Build and push api docker image
         uses: docker/build-push-action@v3
         with:
@@ -58,7 +73,12 @@ jobs:
         id: nginx-meta
         uses: docker/metadata-action@v4
         with:
-          images: rzldev/multi-nginx:1.0
+          images: rzldev/multi-nginx
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       - name: Build and push nginx docker image
         uses: docker/build-push-action@v3
         with:
