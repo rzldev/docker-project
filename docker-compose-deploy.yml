@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  api:
+    image: rzldevdoc/multi-api
+    mem_limit: 128m
+    hostname: api
+    environment:
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+      - PG_HOST=$PG_HOST
+      - PG_PORT=$PG_PORT
+      - PG_DATABASE=$PG_DATABASE
+      - PG_USER=$PG_USER
+      - PG_PASSWORD=$PG_PASSWORD
+    volumes:
+      - /var/www/html/docker-app/server/node_modules
+      - ./server/:/var/www/html/docker-app/server
+    depends_on:
+      - redis
+      - postgres
+    
+  worker:
+    image: rzldevdoc/multi-worker
+    mem_limit: 128m
+    hostname: worker
+    environment:
+      - REDIS_HOST=redis-server
+      - REDIS_PORT=6379
+    volumes:
+      - /var/www/html/docker-app/worker/node_modules
+      - ./worker:/var/www/html/docker-app/worker
+    depends_on:
+      - redis
+
+  client:
+    image: rzldevdoc/multi-client
+    mem_limit: 128m
+    hostname: client
+    environment:
+      - WDS_SOCKET_PORT=0
+    volumes:
+      - /var/www/html/docker-app/client/node_modules
+      - ./client:/var/www/html/docker-app/client
