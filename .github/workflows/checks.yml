@@ -17,51 +17,21 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Extract client metadata (tags, labels) for Docker
-        id: client-meta
-        uses: docker/metadata-action@v4
-        with:
-          images: rzldev/multi-client:1.0
-      - name: Build and push client docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.client-meta.outputs.tags }}
-          labels: ${{ steps.client-meta.outputs.labels }}
-      - name: Extract worker metadata (tags, labels) for Docker
-        id: worker-meta
-        uses: docker/metadata-action@v4
-        with:
-          images: rzldev/multi-worker:1.0
-      - name: Build and push worker docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.worker-meta.outputs.tags }}
-          labels: ${{ steps.worker-meta.outputs.labels }}
-      - name: Extract api metadata (tags, labels) for Docker
-        id: api-meta
-        uses: docker/metadata-action@v4
-        with:
-          images: rzldev/multi-api:1.0
-      - name: Build and push api docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.api-meta.outputs.tags }}
-          labels: ${{ steps.api-meta.outputs.labels }}
-      - name: Extract nginx metadata (tags, labels) for Docker
-        id: nginx-meta
-        uses: docker/metadata-action@v4
-        with:
-          images: rzldev/multi-nginx:1.0
-      - name: Build and push nginx docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.nginx-meta.outputs.tags }}
-          labels: ${{ steps.nginx-meta.outputs.labels }}
+      - name: Test and Lint client app
+        run: docker-compose run --rm -e CI=true client sh -c "npm run test && npm run lint"
+      - name: Build client docker image
+        run: docker build -t rzldev/multi-client ./client
+      - name: Push client docker image
+        run: docker push rzldev/multi-client
+      - name: Build worker docker image
+        run: docker build -t rzldev/multi-worker ./worker
+      - name: Push worker docker image
+        run: docker push rzldev/multi-worker
+      - name: Build api docker image
+        run: docker build -t rzldev/multi-api ./server
+      - name: Push api docker image
+        run: docker push rzldev/multi-api
+      - name: Build nginx docker image
+        run: docker build -t rzldev/multi-nginx ./nginx
+      - name: Push nginx docker image
+        run: docker push rzldev/multi-nginx

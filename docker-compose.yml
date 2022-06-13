@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     environment:
       - REDIS_HOST=redis-server
       - REDIS_PORT=6379
@@ -23,7 +23,7 @@ services:
   worker:
     build:
       context: ./worker
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     environment:
       - REDIS_HOST=redis-server
       - REDIS_PORT=6379
@@ -36,7 +36,7 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     environment:
       - WDS_SOCKET_PORT=0
     volumes:
