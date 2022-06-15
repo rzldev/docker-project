@@ -22,16 +22,16 @@ jobs:
       - name: Build client docker image
         run: docker build -t rzldevdoc/multi-client:2.0 ./client
       - name: Push client docker image
-        run: docker push rzldevdoc/multi-client
+        run: docker push rzldevdoc/multi-client:2.0
       - name: Build worker docker image
         run: docker build -t rzldevdoc/multi-worker:2.0 ./worker
       - name: Push worker docker image
-        run: docker push rzldevdoc/multi-worker
+        run: docker push rzldevdoc/multi-worker:2.0
       - name: Build api docker image
         run: docker build -t rzldevdoc/multi-api:2.0 ./server
       - name: Push api docker image
-        run: docker push rzldevdoc/multi-api
+        run: docker push rzldevdoc/multi-api:2.0
       - name: Build nginx docker image
         run: docker build -t rzldevdoc/multi-nginx:2.0 ./nginx
       - name: Push nginx docker image
-        run: docker push rzldevdoc/multi-nginx
+        run: docker push rzldevdoc/multi-nginx:2.0
