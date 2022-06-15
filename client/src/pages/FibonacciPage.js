@@ -60,7 +60,7 @@ function FibonacciPage() {
 
   return (
     <div>
-      <div className="header">Fibonacci Calculator</div>
+      <div className="header">Fibonacci Calculator 2.0</div>
 
       <form className="index__form" onSubmit={submitFormHandler}>
         <div className="form__control">

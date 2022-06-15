@@ -20,18 +20,18 @@ jobs:
       - name: Test and Lint client app
         run: docker-compose run --rm -e CI=true client sh -c "npm run test && npm run lint"
       - name: Build client docker image
-        run: docker build -t rzldevdoc/multi-client ./client
+        run: docker build -t rzldevdoc/multi-client:2.0 ./client
       - name: Push client docker image
         run: docker push rzldevdoc/multi-client
       - name: Build worker docker image
-        run: docker build -t rzldevdoc/multi-worker ./worker
+        run: docker build -t rzldevdoc/multi-worker:2.0 ./worker
       - name: Push worker docker image
         run: docker push rzldevdoc/multi-worker
       - name: Build api docker image
-        run: docker build -t rzldevdoc/multi-api ./server
+        run: docker build -t rzldevdoc/multi-api:2.0 ./server
       - name: Push api docker image
         run: docker push rzldevdoc/multi-api
       - name: Build nginx docker image
-        run: docker build -t rzldevdoc/multi-nginx ./nginx
+        run: docker build -t rzldevdoc/multi-nginx:2.0 ./nginx
       - name: Push nginx docker image
         run: docker push rzldevdoc/multi-nginx

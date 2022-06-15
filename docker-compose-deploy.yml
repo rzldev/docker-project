@@ -16,22 +16,17 @@ services:
     volumes:
       - /var/www/html/docker-app/server/node_modules
       - ./server/:/var/www/html/docker-app/server
-    depends_on:
-      - redis
-      - postgres
     
   worker:
     image: rzldevdoc/multi-worker
     mem_limit: 128m
     hostname: worker
     environment:
-      - REDIS_HOST=redis-server
-      - REDIS_PORT=6379
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
     volumes:
       - /var/www/html/docker-app/worker/node_modules
       - ./worker:/var/www/html/docker-app/worker
-    depends_on:
-      - redis
 
   client:
     image: rzldevdoc/multi-client
@@ -42,3 +37,10 @@ services:
     volumes:
       - /var/www/html/docker-app/client/node_modules
       - ./client:/var/www/html/docker-app/client
+
+  nginx:
+    image: rzldevdoc/multi-nginx
+    mem_limit: 128m
+    hostname: nginx
+    ports:
+      - "80:80"
